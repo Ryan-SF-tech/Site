@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PetShop - Loja</title>
+    <style>
+        body { font-family: Arial; max-width: 1200px; margin: 0 auto; padding: 20px; background-color: #ffe0dc; }
+        .produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .produto { border: 1px solid #131212; padding: 15px; border-radius: 8px; text-align: center; }
+        .produto img { max-width: 100%; height: 150px; object-fit: cover; }
+        .preco { color: #e74c3c; font-size: 1.2em; font-weight: bold; }
+        .estoque { color: #27ae60; }
+        .btn { background: #3498db; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .carrinho-btn { position: fixed; top: 20px; right: 20px; background: #e74c3c; padding: 15px; border-radius: 50%; }
+    </style>
+</head>
+<body>
+    <h1>🛍️ Loja PetShop</h1>
+    
+    <a href="{{ url_for('loja.carrinho') }}" class="carrinho-btn">
+        🛒 Carrinho
+    </a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="produtos">
+        {% for produto in produtos %}
+        <div class="produto">
+            {% if produto.imagem %}
+            <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
+            {% else %}
+            <div style="height: 150px; background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                <img src="../static/imagens/dogson.jpg" alt="Imagem não disponível">
+            </div>
+            {% endif %}
+            <h3>{{ produto.nome }}</h3>
+            <p>{{ produto.descricao }}</p>
+            <p class="preco">R$ {{ "%.2f"|format(produto.preco) }}</p>
+            <p class="estoque">Estoque: {{ produto.quantidade_estoque }}</p>
+            
+            <form action="{{ url_for('loja.adicionar_carrinho') }}" method="post">
+                <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                <input type="number" name="quantidade" value="1" min="1" max="{{ produto.quantidade_estoque }}" style="width: 60px;">
+                <button type="submit" class="btn">Adicionar ao Carrinho</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>  
+
+    <div style="text-align: center; margin-top: 40px;"> 
+        <a href="{{ url_for('loja.loja') }}">🛍️ Loja</a> | 
+        <a href="/localizacao">🗺️ Voltar ao Mapa</a>
+    </div>
+</body>
+</html>

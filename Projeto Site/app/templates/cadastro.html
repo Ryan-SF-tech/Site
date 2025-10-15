@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1 class="titulo">Cadastro De Novo Usuário</h1>
+    <div id="form_fundo">
+        <h1>Cadastro</h1>
+        <div id="form_frente">
+            <form method="POST" action="/cadastrarUsuario">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" required><br><br>
+                <label for="email">EMAIL</label>
+                <input type="email" name="email" id="email" required placeholder="Digite seu email"><br><br>
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" required><br><br>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

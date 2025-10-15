@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Centros de Adoção</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-section, .list-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .centro-item {
+            background: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐾 Gerenciar Centros de Adoção</h1>
+        
+    
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        
+        <div class="form-section">
+            <h2>➕ Adicionar Novo Centro</h2>
+            <form action="{{ url_for('centros.adicionar_centro') }}" method="post">
+                <div class="form-group">
+                    <label for="nome">Nome do Centro:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="endereco">Endereço Completo:</label>
+                    <input type="text" id="endereco" name="endereco" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="number" id="latitude" name="latitude" step="any" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="number" id="longitude" name="longitude" step="any" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone">Telefone (opcional):</label>
+                    <input type="text" id="telefone" name="telefone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Website (opcional):</label>
+                    <input type="text" id="website" name="website">
+                </div>
+                
+                <button type="submit">Adicionar Centro</button>
+            </form>
+        </div>
+        
+        
+        <div class="list-section">
+            <h2>📋 Centros Cadastrados</h2>
+            
+            {% if centros %}
+                {% for centro in centros %}
+                    <div class="centro-item">
+                        <h3>{{ centro.nome }}</h3>
+                        <p><strong>Endereço:</strong> {{ centro.endereco }}</p>
+                        <p><strong>Coordenadas:</strong> {{ centro.latitude }}, {{ centro.longitude }}</p>
+                        {% if centro.telefone %}
+                            <p><strong>Telefone:</strong> {{ centro.telefone }}</p>
+                        {% endif %}
+                        {% if centro.website %}
+                            <p><strong>Website:</strong> {{ centro.website }}</p>
+                        {% endif %}
+                        <p><strong>Data de Cadastro:</strong> {{ centro.data_cadastro.strftime('%d/%m/%Y %H:%M') }}</p>
+                        
+                        <form action="{{ url_for('centros.excluir_centro', id=centro.id) }}" method="post" style="display: inline;">
+                            <button type="submit" class="btn-danger" onclick="return confirm('Tem certeza que deseja excluir este centro?')">Excluir</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Nenhum centro de adoção cadastrado ainda.</p>
+            {% endif %}
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('admin.adm') }}" style="color: #3498db; text-decoration: none;">← Voltar para o Painel Administrativo</a>
+        </div>
+    </div>
+</body>
+</html>

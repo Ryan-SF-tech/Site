@@ -1,0 +1,32 @@
+[
+    {
+        "nome": "pizza",
+        "senha": "pizzaad",
+        "email": "pizza@pizza"
+    },
+    {
+        "nome": "Misanga",
+        "senha": "345789",
+        "email": "misanga@misan"
+    },
+    {
+        "nome": "Ryan",
+        "senha": "9012",
+        "email": "ryanmansanof@gmail.com"
+    },
+    {
+        "nome": "Jean",
+        "senha": "adg467",
+        "email": "jeannovaes@gmail.com"
+    },
+    {
+        "nome": "Gustavo",
+        "senha": "0qw79\u00e7",
+        "email": "gustrandi@gmail.com"
+    },
+    {
+        "nome": "Decarolli",
+        "senha": "zmsd13",
+        "email": "decabri@gmail.com"
+    }
+]

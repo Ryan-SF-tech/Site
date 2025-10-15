@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionário de Adoção</title>
+    <link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+
+    <h1>Você está apto a adotar um animal?</h1>
+
+    <form id="questionario">
+        
+    </form>
+
+    <button onclick="verificar()">Verificar Aptidão</button>
+
+    <div id="resultado"></div>
+
+    <script>
+        const perguntas = [
+            "Você tem tempo diário para cuidar do animal?",
+            "Você tem recursos financeiros para cuidar de um pet?",
+            "Você já pesquisou sobre as necessidades do animal?",
+            "Você aceita responsabilidade de longo prazo?",
+            "Todos na casa concordam com a adoção?",
+            "Você tem espaço adequado?",
+            "Você sabe qual animal é ideal para seu estilo de vida?",
+            "Você se compromete a não abandonar o animal?",
+            "Você tem paciência para treinar e educar?",
+            "Você tem tempo para passear (se for cachorro) ou ajudar o animal a gastar sua energia em geral?",
+            "Você considera o animal parte da família?",
+            "Você está disposto a levar ao veterinário regularmente?",
+            "Você sabe o que o animal pode ou não comer?",
+            "Você lida bem com o fato de que o animal pode ficar doente e envelhecer?",
+            "Você está adotando de forma responsável e não por impulso?"
+        ];
+
+        const form = document.getElementById("questionario");
+
+        perguntas.forEach((pergunta, index) => {
+            const div = document.createElement("div");
+            div.className = "pergunta";
+            div.innerHTML = `
+                <label>${index + 1}. ${pergunta}</label><br>
+                <input type="radio" name="q${index}" value="sim" required> Sim
+                <input type="radio" name="q${index}" value="nao" required> Não
+            `;
+            form.appendChild(div);
+        });
+
+        async function salvarResultado(nome, totalSim) {
+            try {
+                console.log("📤 Enviando dados:", { nome_usuario: nome, total_sim: totalSim });
+                
+                const response = await fetch('/salvar_resultado_teste', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome_usuario: nome,
+                        total_sim: totalSim
+                    })
+                });
+                
+                const data = await response.json();
+                console.log("📥 Resposta do servidor:", data);
+                return data.success;
+            } catch (error) {
+                console.error('❌ Erro ao salvar resultado:', error);
+                return false;
+            }
+        }
+
+        async function verificar() {
+            let respostas = document.querySelectorAll('input[type="radio"]:checked');
+            let totalSim = 0;
+
+            respostas.forEach(radio => {
+                if (radio.value === "sim") {
+                    totalSim++;
+                }
+            });
+
+            const resultado = document.getElementById("resultado");
+
+            
+            if (respostas.length < perguntas.length) {
+                resultado.innerHTML = "❌ Responda TODAS as perguntas antes de continuar.";
+                resultado.style.color = "orange";
+                return;
+            }
+
+            
+            const nomeUsuario = prompt("Por favor, digite seu nome para registrar o resultado do teste:");
+            
+            if (!nomeUsuario || nomeUsuario.trim() === "") {
+                resultado.innerHTML = "❌ É necessário informar o nome para registrar o teste.";
+                resultado.style.color = "orange";
+                return;
+            }
+
+            resultado.innerHTML = "⏳ Salvando resultado...";
+            resultado.style.color = "blue";
+
+            
+            const salvou = await salvarResultado(nomeUsuario.trim(), totalSim);
+            
+            if (salvou) {
+                if (totalSim > 7) {
+                    resultado.innerHTML = `✅ Parabéns ${nomeUsuario}! Você está apto para adoção! Redirecionando...`;
+                    resultado.style.color = "yellow";
+                    
+                    
+                    setTimeout(() => {
+                        window.location.href = "/localizacao";
+                    }, 2000);
+                } else {
+                    resultado.innerHTML = `❌ ${nomeUsuario}, você ainda não está apto a adotar. Considere se preparar melhor.`;
+                    resultado.style.color = "red";
+                }
+            } else {
+                resultado.innerHTML = "❌ Erro ao salvar resultado. Tente novamente.";
+                resultado.style.color = "red";
+            }
+        }
+    </script>
+
+</body>
+</html>

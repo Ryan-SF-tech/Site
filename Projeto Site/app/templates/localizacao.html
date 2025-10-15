@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Localização de Centros de Adoção</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        #map { 
+            height: 600px;
+            margin: 25px 0;
+            border-radius: 12px;
+            border: 2px solid #3498db;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #map:hover {
+            transform: scale(1.01);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.3);
+        }
+
+        .user-icon { 
+            font-size: 26px; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .external-icon { 
+            font-size: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .pet-icon { 
+            font-size: 22px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .leaflet-popup-content b {
+            color: #3498db;
+            font-size: 16px;
+        }
+
+        .leaflet-popup-content a {
+            color: #2980b9;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .leaflet-popup-content a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .search-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .search-container input {
+            padding: 12px;
+            width: 300px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-container button {
+            padding: 12px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    <div class="container">
+        <h1>Centros de Adoção Próximos</h1>
+        
+        
+        <div class="search-container">
+            <input type="text" id="citySearch" placeholder="🔍 Buscar cidade (ex: Paranavaí, Maringá, São Paulo...)">
+            <button onclick="searchCity()">Buscar</button>
+        </div>
+
+        <div id="map"></div>
+
+            
+    <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+        <h2>🛍️ Precisa de Produtos para seu Pet?</h2>
+        <p>Visite nossa loja online com ração, brinquedos e acessórios!</p>
+        <a href="{{ url_for('loja.loja') }}" 
+           style="display: inline-block; padding: 15px 30px; background: #3498db; color: white; 
+                  text-decoration: none; border-radius: 8px; font-size: 18px; font-weight: bold;">
+            🛒 Ir para a Loja
+        </a>
+    </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        let map;
+
+        
+        function searchCity() {
+            const city = document.getElementById('citySearch').value.trim().toLowerCase();
+            
+            const cityCoordinates = {
+                'paranavai': [-23.0817, -52.4668],
+                'paranavaí': [-23.0817, -52.4668],
+                'maringa': [-23.4273, -51.9375],
+                'maringá': [-23.4273, -51.9375],
+                'londrina': [-23.3105, -51.1629],
+                'sao paulo': [-23.5505, -46.6333],
+                'são paulo': [-23.5505, -46.6333],
+                'curitiba': [-25.4284, -49.2733],
+                'rio de janeiro': [-22.9068, -43.1729],
+                'brasilia': [-15.7942, -47.8822],
+                'brasília': [-15.7942, -47.8822]
+            };
+            
+            const coords = cityCoordinates[city];
+            if (coords) {
+                map.setView(coords, 13);
+                setTimeout(() => {
+                    alert(`Mapa centralizado em ${document.getElementById('citySearch').value}`);
+                }, 500);
+            } else {
+                alert('Cidade não encontrada. Tente: Paranavaí, Maringá, Londrina, São Paulo, etc.');
+            }
+        }
+
+        async function initMap() {
+            map = L.map('map').setView([-23.5505, -46.6333], 13);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async pos => {
+                    const userLocation = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude
+                    };
+
+                    map.setView([userLocation.lat, userLocation.lng], 13);
+
+                    L.marker([userLocation.lat, userLocation.lng], {
+                        icon: L.divIcon({ html: '📍', className: 'user-icon' })
+                    }).addTo(map).bindPopup("Você está aqui");
+
+                    try {
+                        const response = await fetch(`/api/search-centers?lat=${userLocation.lat}&lng=${userLocation.lng}`);
+                        
+                        if (response.status === 401) {
+                            alert("Você precisa estar logado para acessar esta funcionalidade");
+                            window.location.href = '/';
+                            return;
+                        }
+                        
+                        if (!response.ok) {
+                            throw new Error(await response.text());
+                        }
+                        
+                        const centers = await response.json();
+
+                        console.log("🔍 CENTROS RECEBIDOS DA API:", centers);
+                        console.log("📊 Total de centros:", centers.length);
+                        
+                        if (!centers || centers.length === 0) {
+                            alert("Nenhum centro de adoção encontrado na sua região.");
+                            return;
+                        }
+
+                        centers.forEach((center, index) => {
+                           console.log(`📍 Centro ${index + 1}:`, center);
+
+                           if (center.gps_coordinates) {
+                              console.log(`   ✅ Tem coordenadas: ${center.gps_coordinates.latitude}, ${center.gps_coordinates.longitude}`);
+        
+        
+                              const iconHtml = center.fonte === 'banco' ? '🐾' : '🏢';
+                              const iconClass = center.fonte === 'banco' ? 'pet-icon' : 'external-icon';
+        
+                              const marker = L.marker([center.gps_coordinates.latitude, center.gps_coordinates.longitude], {
+                                  icon: L.divIcon({ html: iconHtml, className: iconClass })
+                                }).addTo(map);
+        
+                                let popupContent = `<b>${center.title || 'Centro de Adoção'}</b><br>${center.address || ''}`;
+        
+        
+                                if (center.fonte === 'banco') {
+                                   popupContent += `<br><small>📋 Cadastrado no sistema</small>`;
+                                } else {
+                                    popupContent += `<br><small>🌐 Encontrado online</small>`;
+                                }
+        
+                                if (center.phone) {
+                                   popupContent += `<br>📞 Telefone: ${center.phone}`;
+                                }
+                                if (center.website) {
+                                   popupContent += `<br><a href="${center.website}" target="_blank">🌐 Website</a>`;
+                                }
+        
+                                marker.bindPopup(popupContent);
+                                console.log(`   🎯 Marcador criado para: ${center.title} (${center.fonte})`);
+                            } else {
+                                console.log(`   ❌ SEM coordenadas:`, center);
+                            }
+                        });
+
+                    } catch (error) {
+                        console.error("❌ Erro na requisição:", error);
+                        
+                        
+                        fetch('/api/search-centers')
+                            .then(r => r.json())
+                            .then(data => {
+                                console.log("📡 Dados da API (sem parâmetros):", data);
+                            })
+                            .catch(err => console.error("❌ Erro no teste:", err));
+                    }
+
+                }, (error) => {
+                    alert("Erro ao obter localização: " + error.message);
+                });
+            } else {
+                alert("Seu navegador não suporta geolocalização.");
+            }
+        }
+
+        window.onload = initMap;
+    </script>
+    {% endblock %}
+</body>
+</html>

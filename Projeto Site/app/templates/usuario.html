@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ponto De Adoção</title>
+  <link rel="stylesheet" href="/static/usuario.css" />
+</head>
+<body>
+  <header>
+    <h1>🐾 Ponto De Adoção</h1>
+  </header><br><br>
+
+  <main>
+    <section class="apresentacao">
+      <h2>Objetivo do nosso site</h2>
+      <p>
+        Bem-vindo(a) ao <strong>Ponto De Adoção</strong>! Nosso objetivo é ajudar você a descobrir se está preparado(a) para adotar um animal de estimação e, caso esteja, mostrar os centros de adoção mais próximos da sua localização.
+      </p>
+      <p>
+        A adoção de um pet precisa ser feita com responsabilidade. Por isso, desenvolvemos um questionário que avalia fatores como tempo disponível, condições do lar e conhecimento sobre cuidados com animais.
+      </p>
+      <p>
+        Após preencher o questionário, se você estiver apto(a), indicamos ONGs e abrigos confiáveis próximos de você, facilitando o contato e o processo de adoção.
+      </p>
+      <p>
+        Vamos promover a adoção e dar uma nova chance para animais incríveis que precisam por um lar!
+      </p>
+    </section>
+
+    <section class="cta">
+        <a href="{{ url_for('usuario.questionario') }}" class="botao">Começar o questionário</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Ponto De Adoção. Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>

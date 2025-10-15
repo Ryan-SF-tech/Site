@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background: url(../static/imagens/dog1.jpg) no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+}
+
+h1 {
+    color: #a4fd64;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 3px 3px 6px rgb(0, 0, 0);
+    border: 2px solid #000; /* contorno preto */
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.4); /* fundo translúcido para destacar o título */
+}
+
+.pergunta {
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #000; /* contorno preto */
+}
+
+label {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin: 8px 0;
+}
+
+input[type="radio"] {
+    margin-right: 8px;
+    transform: scale(1.2); /* aumenta um pouco o tamanho */
+    accent-color: #3498db; /* cor do radio button */
+}
+
+button {
+    display: block;
+    margin: 30px auto;
+    padding: 14px 28px;
+    font-size: 18px;
+    background-color: #3498db;
+    color: white;
+    border: 2px solid #000; /* contorno preto */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+#resultado {
+    margin-top: 30px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #000; /* contorno preto */
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+}

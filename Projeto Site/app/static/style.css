@@ -1,0 +1,12 @@
+
+
+@import url(../static/home.css);
+
+.titulo{
+    font-size: 45px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-align: center;
+    color: rgb(250, 236, 77);
+    text-shadow: 2px 2px 4px black;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PET's</title>
+    <link rel="stylesheet" href="/static/admnistrador.css">
+</head>
+
+<body>
+
+     {% set menssagem = get_flashed_messages() %}
+     {%  if menssagem %}
+            <div class="flash_alerta">
+                {{menssagem[0]}}
+
+            </div>
+        
+     {% endif %}
+     <h1 class="titulo">ADMINISTRADOR</h1>
+
+    <div id="form_fundo">
+        <h1>Cadastrar Usuário</h1>
+        <h1>Cadastro</h1>
+        <div id="form_frente">
+            <form action="/cadastrarUsuario" id="login" method="post">
+                <label for="nome">NOME</label>
+                <input type="text" name="nome" id="nome" required placeholder="Digite seu nome"><br><br>
+                <label for="email">EMAIL</label>
+                <input type="email" name="email" id="email" required placeholder="Digite seu email"><br><br>
+                <label for="senha" id="senha">SENHA</label>
+                <input type="text" name="senha" id="senha" required placeholder="Digite sua senha"><br><br>
+                <button type="submit" id="btn_login">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>CADASTRAR
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="form_fundo" class="listaUsuario">
+        <h1>Usuarios Cadastrados</h1>
+        <h1>Listagem</h1>
+        <div id="form_frente">
+            {% if usuarios %}
+                {% for c in usuarios %}
+                <form action="/excluirUsuario" method="post">
+                    <ul>
+                        
+                        <input type="hidden" name="usuarioPexcluir" value="{{c}}">
+                        <li>NOME:
+                            {{c['nome']}}
+                        </li><br>
+                        <li>SENHA: {{c['senha']}}</li>
+                    </ul>
+                    <button type="submit">EXCLUIR</button>
+                </form>  
+                    -------------------------------------------
+                {% endfor %}
+            {% else %}
+            <h1>não exite usuarios cadastrados</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    
+<a href="{{ url_for('centros.admin_centros') }}" style="display: block; margin: 10px 0; padding: 10px; background: #3498db; color: white; text-decoration: none; border-radius: 5px; text-align: center;">
+    🗺️ Gerenciar Centros de Adoção
+</a>
+    
+
+</body>
+
+</html>
